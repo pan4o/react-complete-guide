@@ -9,7 +9,8 @@ class App extends Component {
       { name: 'James', age: 33 },
       { name: 'Stephen', age: 28 },
       { name: 'Cavin', age: 27 },
-    ]
+    ],
+    showPersons: false
   }
 
   switchNameHandler = (newName) => {
@@ -22,13 +23,20 @@ class App extends Component {
     })
   }
 
-  nameChangedhandler = (event) => {
+  nameChangedHandler = (event) => {
     this.setState({
       persons: [
         { name: 'James', age: 33 },
         { name: event.target.value, age: 28 },
         { name: 'Cavin Durant', age: 27 },
       ]
+    })
+  }
+
+  togglePersonsHandler = () => {
+    const doesShow = this.state.showPersons;
+    this.setState({
+      showPersons: !doesShow
     })
   }
 
@@ -41,29 +49,39 @@ class App extends Component {
       cursor: 'pointer'
     };
 
+    let persons = null;
+
+    if (this.state.showPersons) {
+      persons = (
+        <div>
+          <Person
+            name={this.state.persons[0].name}
+            age={this.state.persons[0].age}
+            click={this.switchNameHandler.bind(this, 'LEBA JAMES')}
+          >My Hobbie: Basket ball</Person>
+          <Person
+            name={this.state.persons[1].name}
+            age={this.state.persons[1].age}
+            changed={this.nameChangedHandler}
+          ></Person>
+          <Person
+            name={this.state.persons[2].name}
+            age={this.state.persons[2].age}
+          ></Person>
+        </div>
+      );
+    }
+
     return (
       <div className="App">
         <h1>Hi I'm a React App!</h1>
         <p>This is really working</p>
         <button
           style={style}
-          onClick={() => this.switchNameHandler('Leba James')}>
-          Switch Name
+          onClick={this.togglePersonsHandler}>
+          {this.state.showPersons ? "Hide" : "Show"} Persons
         </button>
-        <Person
-          name={this.state.persons[0].name}
-          age={this.state.persons[0].age}
-          click={this.switchNameHandler.bind(this, 'LEBA JAMES')}
-        >My Hobbie: Basket ball</Person>
-        <Person
-          name={this.state.persons[1].name}
-          age={this.state.persons[1].age}
-          changed={this.nameChangedhandler}
-        ></Person>
-        <Person
-          name={this.state.persons[2].name}
-          age={this.state.persons[2].age}
-        ></Person>
+        {persons}
       </div>
     );
   }
